@@ -1,8 +1,8 @@
-const { users } = require('../models');
+const { Users } = require('../models');
 const UserToken = require('../authentications/JavascriptWebToken');
 
 const userLogin = async ({ email, password }) => {
-  const userRequestedBD = await users.findOne({ where: { email } });
+  const userRequestedBD = await Users.findOne({ where: { email } });
 
   if (!userRequestedBD) {
     const result = 'Invalid fields';
@@ -10,7 +10,7 @@ const userLogin = async ({ email, password }) => {
   }
 
   if (userRequestedBD.password === password) {
-    const userToken = UserToken.generateNewToken({ id: users.id });
+    const userToken = UserToken.generateNewToken({ id: Users.id });
     return userToken;
   }
 };

@@ -12,7 +12,7 @@ const userLogin = async (req, res, _next) => {
     if (newToken === 'Invalid fields') {
         return res.status(400).json({ message: 'Invalid fields' });
     }
-    
+
     return res.status(HTTP_200_OK).json({ newToken });
   } catch (error) {
     return res.status(400).json({ message: 'Invalid fields' });
