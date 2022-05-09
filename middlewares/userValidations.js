@@ -26,7 +26,7 @@ const loginValidations = (req, res, next) => {
     const { displayName, email, password } = req.body;
 
     // valida DisplayName
-    if (displayName.length < 8) {
+    if (displayName && displayName.length < 8) {
       return res.status(400).json({
         message: '"displayName" length must be at least 8 characters long',
       });
@@ -50,6 +50,40 @@ const loginValidations = (req, res, next) => {
     next();
 };
 
-module.exports = { loginValidations };
+const emailValidations = (req, res, next) => {
+  const { email, password } = req.body;
+
+    // valida DisplayName
+    if (email === '') {
+      return res.status(400).json({
+        message: '"email" is not allowed to be empty',
+      });
+    }
+
+    if (password === '') {
+      return res.status(400).json({
+        message: '"password" is not allowed to be empty',
+      });
+    }
+
+    // valida Email
+    // const emailVal = emailValidator(email);
+    // if (!emailVal.isValid) {
+    //   return res.status(400).json({
+    //     message: emailVal.message,
+    //   });
+    // }
+
+    // // valida Password
+    // if (!passwordValidator(password).isValid) {
+    //   return res.status(400).json({
+    //     message: passwordValidator(password).message,
+    //   });
+    // }
+
+    next();
+};
+
+module.exports = { loginValidations, emailValidations };
 // REFERÊNCIAS:
 // https://www.delftstack.com/pt/howto/javascript/javascript-remove-first-character-from-string/#:~:text=Aqui%2C%20utilizamos%20replace(%2F%5E.,%22%22%20%C3%A9%20a%20string%20vazia.

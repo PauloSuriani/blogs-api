@@ -2,7 +2,7 @@ const UserServices = require('../services/userServices');
 
 const { HTTP_CREATED } = require('../httpStatusProtocols');
 
-const userRegistration = async (req, res, next) => {
+const userRegistration = async (req, res, _next) => {
   try {
     const { displayName, email, password, image } = req.body;
     const loginObj = { displayName, email, password, image };
@@ -14,7 +14,7 @@ const userRegistration = async (req, res, next) => {
     }
     return res.status(HTTP_CREATED).json({ newToken });
   } catch (error) {
-    next(error);
+    return res.status(400).json({ message: 'Invalid fields' });
   }
 };
 
