@@ -20,7 +20,6 @@ const userRegistration = async (req, res, _next) => {
 
 const getUsers = async (_req, res, _next) => {
     const allUsers = await UserServices.getUsers();
-    console.log('allUsers:', allUsers);
     return res.status(HTTP_200_OK).json(allUsers);
 };
 
