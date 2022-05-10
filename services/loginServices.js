@@ -10,7 +10,7 @@ const userLogin = async ({ email, password }) => {
   }
 
   if (userRequestedBD.password === password) {
-    const userToken = UserToken.generateNewToken({ id: Users.id });
+    const userToken = UserToken.generateNewToken({ id: userRequestedBD.dataValues.id });
     return userToken;
   }
 };

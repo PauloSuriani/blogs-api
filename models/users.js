@@ -10,11 +10,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       password: {
           type: DataTypes.STRING,
-          allowNull: false,
+        //   allowNull: false,
       },
       image: {
           type: DataTypes.STRING,
       },
-  }, { timestamps: false });
+  }, { timestamps: false,
+    modelName: 'Users' });
   return Users;
 };

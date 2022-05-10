@@ -2,6 +2,8 @@ const express = require('express');
 
 const UserRouters = require('./routers/userRouters');
 const LoginRouters = require('./routers/loginRouters');
+const CategoriesRouters = require('./routers/categoriesRouters');
+const PostRouters = require('./routers/postRouters');
 
 const PORT = process.env.PORT || 3000;
 
@@ -15,5 +17,7 @@ app.get('/', (request, response) => {
 
 app.use('/login', LoginRouters);
 app.use('/user', UserRouters);
+app.use('/categories', CategoriesRouters);
+app.use('/post', PostRouters);
 
 app.listen(PORT, () => console.log(`ouvindo porta ${PORT}!`));

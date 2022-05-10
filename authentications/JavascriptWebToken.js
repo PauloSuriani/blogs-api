@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
 
-const JWT_SECRET = process.env.SECRET;
+const JWT_SECRET = 'olatrybe';
 
 const generateNewToken = (data) => 
   jwt.sign(data, JWT_SECRET, {
@@ -15,3 +14,7 @@ module.exports = {
     generateNewToken,
     verifyToken,
 };
+
+// ref:
+// https://www.npmjs.com/package/jsonwebtoken
+// https://jwt.io/

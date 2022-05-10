@@ -23,4 +23,19 @@ const getUsers = async (_req, res, _next) => {
     return res.status(HTTP_200_OK).json(allUsers);
 };
 
-module.exports = { userRegistration, getUsers };
+const getUserByPK = async (req, res, _next) => {
+  try {
+    const { id } = req.params;
+
+    const newToken = await UserServices.getUserByPK(id);
+
+    if (newToken === 'User does not exist') {
+      return res.status(404).json({ message: 'User does not exist' });
+    }
+    return res.status(HTTP_200_OK).json(newToken);
+  } catch (error) {
+    return res.status(error.status).json({ message: error.message });
+  }
+};
+
+module.exports = { userRegistration, getUsers, getUserByPK };

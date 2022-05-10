@@ -22,4 +22,14 @@ const getUsers = async () => {
   return allUsers;
 };
 
-module.exports = { userRegistration, getUsers };
+const getUserByPK = async (id) => {
+  const userFounded = await Users.findByPk(id);
+
+  if (!userFounded) {
+    const retorno = 'User does not exist';
+    return retorno;
+  }
+  return userFounded;
+};
+
+module.exports = { userRegistration, getUsers, getUserByPK };
