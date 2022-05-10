@@ -9,12 +9,17 @@ const userRegistration = async ({ displayName, email, password, image }) => {
     return (result);
   }
 
-  const newTokens = UserToken.generateNewToken({ id: Users.id });
+  const newToken = UserToken.generateNewToken({ id: Users.id });
   const createdUser = await Users.create({ displayName, email, password, image });
 
-  if (createdUser) return newTokens;
+  if (createdUser) return newToken;
 
-  throw new Error(400, 'Invalid fields');
+  // throw new Error(400, 'Invalid fields');
 };
 
-module.exports = { userRegistration };
+const getUsers = async () => {
+  const allUsers = await Users.findAll({ attributes: { exclude: 'password' } });
+  return allUsers;
+};
+
+module.exports = { userRegistration, getUsers };

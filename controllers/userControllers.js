@@ -1,6 +1,6 @@
 const UserServices = require('../services/userServices');
 
-const { HTTP_CREATED } = require('../httpStatusProtocols');
+const { HTTP_CREATED, HTTP_200_OK } = require('../httpStatusProtocols');
 
 const userRegistration = async (req, res, _next) => {
   try {
@@ -18,4 +18,10 @@ const userRegistration = async (req, res, _next) => {
   }
 };
 
-module.exports = { userRegistration };
+const getUsers = async (_req, res, _next) => {
+    const allUsers = await UserServices.getUsers();
+    console.log('allUsers:', allUsers);
+    return res.status(HTTP_200_OK).json(allUsers);
+};
+
+module.exports = { userRegistration, getUsers };

@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const JWT_SECRET = 'sha256_password';
+const JWT_SECRET = process.env.SECRET;
 
 const generateNewToken = (data) => 
   jwt.sign(data, JWT_SECRET, {
@@ -8,8 +9,7 @@ const generateNewToken = (data) =>
     algorithm: 'HS256',
 });
 
-const verifyToken = (token) => 
-  jwt.verify(token, JWT_SECRET);
+const verifyToken = (token) => jwt.verify(token, JWT_SECRET);
 
 module.exports = {
     generateNewToken,

@@ -1,3 +1,5 @@
+// const UserToken = require('../authentications/JavascriptWebToken');
+
 const emailValidator = (email) => {
   if (!email) {
     return { isValid: false, message: '"email" is required' };
@@ -65,21 +67,6 @@ const emailValidations = (req, res, next) => {
         message: '"password" is not allowed to be empty',
       });
     }
-
-    // valida Email
-    // const emailVal = emailValidator(email);
-    // if (!emailVal.isValid) {
-    //   return res.status(400).json({
-    //     message: emailVal.message,
-    //   });
-    // }
-
-    // // valida Password
-    // if (!passwordValidator(password).isValid) {
-    //   return res.status(400).json({
-    //     message: passwordValidator(password).message,
-    //   });
-    // }
 
     next();
 };
