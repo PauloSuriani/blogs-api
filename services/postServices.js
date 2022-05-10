@@ -18,7 +18,11 @@ const createNewPost = async (userId, { title, categoryIds, content }) => {
     });
 
     console.log(db.dataValues);
-    const objReturn = { id: db.dataValues.id, userId: db.dataValues.userId, title: db.dataValues.title, content: db.dataValues.content };
+    const objReturn = { id: db.dataValues.id, 
+      userId: db.dataValues.userId, 
+      title: db.dataValues.title, 
+      content: db.dataValues.content,
+    };
     return objReturn;
 };
 
