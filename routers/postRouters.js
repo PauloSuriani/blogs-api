@@ -4,7 +4,7 @@ const {
   createNewPost, 
   getAllPosts, 
   getPostByPK, 
-  editBlogPost,
+  // editBlogPost,
 } = require('../controllers/postControllers');
 
 const { postValidations } = require('../middlewares/postValidations');
@@ -17,6 +17,6 @@ routers
   .post('/', tokenAuth, postValidations, createNewPost)
   .get('/', tokenAuth, getAllPosts)
   .get('/:id', tokenAuth, getPostByPK)
-  .put('/:id', tokenAuth, editBlogPost);
+  // .put('/:id', tokenAuth, editBlogPost);
 
 module.exports = routers;
