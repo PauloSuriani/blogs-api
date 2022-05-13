@@ -16,7 +16,7 @@ routers.use(express.json());
 routers
   .post('/', tokenAuth, postValidations, createNewPost)
   .get('/', tokenAuth, getAllPosts)
-  .get('/:id', tokenAuth, getPostByPK)
+  .get('/:id', tokenAuth, getPostByPK);
   // .put('/:id', tokenAuth, editBlogPost);
 
 module.exports = routers;
