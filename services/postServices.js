@@ -1,23 +1,30 @@
 const { Users, Categories, BlogPosts, PostsCategories } = require('../models');
-// const postscategories = require('../models/postscategories');
-// const error = require('../util/error');
+
+const categoryCheck = async (categoryIds, idSearch) => {
+  const categoryCheckUp = categoryIds.map((catId) => {
+    if (idSearch.includes(catId)) {
+      return true;
+    }
+    return false;
+  });
+  return categoryCheckUp;
+};
 
 const createNewPost = async (userId, { title, categoryIds, content }) => {
     const categories = await Categories.findAll();
     const idSearch = categories.map((id) => id.dataValues.id);
-    const categoryCheck = categoryIds.every((catId) => idSearch.includes(catId));
+    const catCheckBeforeAddToBlog = await categoryCheck(categoryIds, idSearch);
 
-    if (!categoryCheck) {
+    if (catCheckBeforeAddToBlog.includes(false)) {
       const erro = 'erro';
       return erro;
     }
          
     const db = await BlogPosts.create({ title, content, userId, categoryIds });
-    categoryIds.map(async (category) => {
-        await PostsCategories.create({ postId: db.dataValues.id, categoryId: category });
+    categoryIds.map(async (newCategory) => {
+        await PostsCategories.create({ postId: db.dataValues.id, categoryId: newCategory });
     });
 
-    console.log(db.dataValues);
     const objReturn = { id: db.dataValues.id, 
       userId: db.dataValues.userId, 
       title: db.dataValues.title, 
@@ -30,60 +37,66 @@ const getAllPosts = async () => {
   const getPosts = await BlogPosts.findAll({
     include: [
       { model: Categories, as: 'categories' },
-      { model: Users, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Users, as: 'user' },
+    ],
+  });
+  return getPosts;
+};
+
+const formatResult = (getPost, getUser, getCategory) => {
+  const objPost1 = {
+    id: getPost.dataValues.id,
+    title: getPost.dataValues.title,
+    content: getPost.dataValues.content,
+    userId: getPost.dataValues.userId,
+    published: getPost.dataValues.published,
+    updated: getPost.dataValues.updated,
+    user: getUser.dataValues,
+    categories: [getCategory.dataValues],
+  };
+  return objPost1;
+};
+
+const getPostByPK = async (postId) => {
+  const getPost = await BlogPosts.findByPk(postId);
+
+  if (!getPost) {
+    const erro = 'erro';
+    return erro;
+  }
+
+  const id = getPost.dataValues.userId;
+  const getUser = await Users.findByPk(id);
+
+  const idBlogPost = getPost.dataValues.id;
+  const getPostCategory = await PostsCategories.findByPk(idBlogPost);
+
+  const categoriesId = getPostCategory.dataValues.categoryId;
+  const getCategory = await Categories.findByPk(categoriesId);
+
+  const result = formatResult(getPost, getUser, getCategory);
+  return result;
+};
+
+const editBlogPost = async (user, id, title, content) => {
+  await BlogPosts.update({ title, content }, 
+    { where: { userID: user, id } });
+
+  const updatedPost = await BlogPosts.findOne({ where: { id },
+    include: [
+      { model: Categories, as: 'categories' },
+      { model: Users, as: 'user' },
     ],
   });
 
-  return getPosts;
+  return updatedPost;
   };
-
-  const formatResult = (getPost, getUser, getCategory) => {
-    const objPost1 = {
-      id: getPost.dataValues.id,
-      title: getPost.dataValues.title,
-      content: getPost.dataValues.content,
-      userId: getPost.dataValues.userId,
-      published: getPost.dataValues.published,
-      updated: getPost.dataValues.updated,
-      user: getUser.dataValues,
-      categories: [getCategory.dataValues],
-    };
-    return objPost1;
-  };
-
-  const getPostByPK = async (postId) => {
-    const getPost = await BlogPosts.findByPk(postId);
-
-    if (!getPost) {
-      const erro = 'erro';
-      return erro;
-    }
-
-    const id = getPost.dataValues.userId;
-    // console.log('getUser EM POSTPK', id);
-    const getUser = await Users.findByPk(id);
-    
-    // console.log('getUser de USERS', getUser);
-
-    const idBlogPost = getPost.dataValues.id;
-    const getPostCategory = await PostsCategories.findByPk(idBlogPost);
-    console.log('GET POST CATEGORY', getPostCategory);
-
-    const categoriesId = getPostCategory.dataValues.categoryId;
-    // console.log('CHEGAMOS ONDE QUERÍAMOS CATEGORY', categoriesId);
-    const getCategory = await Categories.findByPk(categoriesId);
-    // console.log('CHEGAMOS ONDE QUERÍAMOS CATEGORY', getCategory);
-
-    const result = formatResult(getPost, getUser, getCategory);
-
-    console.log('CHEGAMOS ONDE QUERÍAMOS RESULT', result);
-    return result;
-    };
 
 module.exports = {
     createNewPost,
     getAllPosts,
     getPostByPK,
+    editBlogPost,
 };
 
     // {
